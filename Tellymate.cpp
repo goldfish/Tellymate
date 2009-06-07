@@ -47,6 +47,8 @@ TellyMate Serial to Video adapter
 #include "Tellymate.h"
 
 #define CHAR_ESC "\x1B"
+#define CHAR_CR "\x0D"
+#define CHAR_LF "\x0A"
 
 Tellymate::Tellymate( long serialRate )
 {
@@ -61,12 +63,13 @@ void Tellymate::init()
   Serial.print( CHAR_ESC "E");
   _xloc = 0;
   _yloc = 0;
-  delay( 10 );  // may not be needed.
+  delay( 50 );
 }
 
 void Tellymate::diagnostic()
 {
   Serial.print( CHAR_ESC "Q");
+  delay( 20 );
 }
 
 void Tellymate::clearscreen()
@@ -122,9 +125,80 @@ void Tellymate::cursorleft( int moves )
   cursorto( _yloc, _xloc);
 }
 
+void Tellymate::cursorhome()
+{
+  Serial.print( CHAR_ESC "H" );
+  _xloc = 0;
+  _yloc = 0;
+}
+
+void Tellymate::blockcursor( bool value )
+{
+  if( value ){
+    Serial.print( CHAR_ESC "x4" );
+  }
+  else{
+    Serial.print( CHAR_ESC "y4" );
+  }
+}
+
+void Tellymate::lineoverflow( bool value )
+{
+  if( value ){
+    Serial.print( CHAR_ESC "v" );
+  }
+  else{
+    Serial.print( CHAR_ESC "w" );
+  }
+}
+
 void Tellymate::printchar( unsigned char char2print )
 {
   Serial.print( char2print );
+}
+
+void Tellymate::print( char pstring[])
+{
+  Serial.print( pstring );
+}
+
+void Tellymate::println( char pstring[])
+{
+  Serial.println( pstring );
+}
+
+void Tellymate::box( int width, int height, int startx, int starty )
+{
+  cursorto( starty, startx );
+  printchar( 218 );
+  int xspace = width - 2;
+  int yspace = height - 2;
+  for( int i = 0; i < xspace; i++ )
+  {
+    cursorright(1);
+    printchar( 196 );
+  }
+  cursorright(1);
+  printchar( 191 );
+  for( int i = 0; i < yspace; i++ )
+  {
+    cursordown(1);
+    printchar( 179 );
+  }
+  cursordown(1);
+  printchar( 217 );
+  for( int i = 0; i < xspace; i++ )
+  {
+    cursorleft(1);
+    printchar( 196 );
+  }
+  cursorleft(1);
+  printchar( 192 );
+  for( int i = 0; i < yspace; i++ )
+  {
+    cursorup(1);
+    printchar( 179 );
+  }
 }
 
 void Tellymate::cursorto( uint8_t row , uint8_t col )

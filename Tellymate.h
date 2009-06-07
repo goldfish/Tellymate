@@ -53,6 +53,12 @@ class Tellymate
     void cursordown( int );
     void cursorleft( int );
     void cursorright( int );
+    void cursorhome();
+    void blockcursor( bool );
+    void lineoverflow( bool );
+    void print( char[] );
+    void println( char[] );
+    void box( int, int, int, int );
     void printchar( unsigned char );
     void cursorto( uint8_t, uint8_t );
   private:
