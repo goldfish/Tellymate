@@ -46,18 +46,22 @@ TellyMate Serial to Video adapter
 #include "WProgram.h"
 #include "Tellymate.h"
 
-//#define CHAR_ESC "\x1B"
+#define CHAR_ESC "\x1B"
 
-Tellymate::Tellymate( int powerOn )
-{
-  digitalWrite( 13, powerOn );
-}
-
-void Tellymate::init( long serialRate )
+Tellymate::Tellymate( long serialRate )
 {
   _serialRate = serialRate;
+  _xloc = 0;
+  _yloc = 0;
+}
+
+void Tellymate::init()
+{
   Serial.begin( _serialRate );
-  Serial.print( CHAR_ESC "E" );
+  Serial.print( CHAR_ESC "E");
+  _xloc = 0;
+  _yloc = 0;
+  delay( 10 );  // may not be needed.
 }
 
 void Tellymate::diagnostic()
@@ -67,7 +71,9 @@ void Tellymate::diagnostic()
 
 void Tellymate::clearscreen()
 { // <ESC>E
-  Serial.print( "\x1B" "E" ); 
+  Serial.print( CHAR_ESC "E" ); 
+  _xloc = 0;
+  _yloc = 0;
 }
 
 void Tellymate::cursoron()
@@ -80,6 +86,42 @@ void Tellymate::cursoroff()
   Serial.print( CHAR_ESC "f" );
 }
 
+void Tellymate::cursorup( int moves )
+{
+  _yloc = _yloc - moves;
+  if( _yloc < 0 ){
+      _yloc = 0;
+  }
+  cursorto( _yloc, _xloc);
+}
+
+void Tellymate::cursordown( int moves )
+{
+  _yloc = _yloc + moves;
+  if( _yloc > 24 ){
+      _yloc = 24;
+  }
+  cursorto( _yloc, _xloc);
+}
+
+void Tellymate::cursorright( int moves )
+{
+  _xloc = _xloc + moves;
+  if( _xloc > 37 ){
+      _xloc = 37;
+  }
+  cursorto( _yloc, _xloc);
+}
+
+void Tellymate::cursorleft( int moves )
+{
+  _xloc = _xloc - moves;
+  if( _xloc < 0 ){
+      _xloc = 0;
+  }
+  cursorto( _yloc, _xloc);
+}
+
 void Tellymate::printchar( unsigned char char2print )
 {
   Serial.print( char2print );
@@ -90,4 +132,6 @@ void Tellymate::cursorto( uint8_t row , uint8_t col )
   Serial.print( CHAR_ESC "Y" ) ;
   Serial.print((unsigned char)(32 + row)) ;
   Serial.print((unsigned char)(32 + col)) ;
+  _xloc = col;
+  _yloc = row;
 }

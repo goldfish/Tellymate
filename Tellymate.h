@@ -43,16 +43,22 @@ OF SUCH DAMAGE.
 class Tellymate
 {
   public:
-    Tellymate( int );
-    void init( long );
+    Tellymate( long );
+    void init();
     void diagnostic();
     void clearscreen();
     void cursoron();
     void cursoroff();
+    void cursorup( int );
+    void cursordown( int );
+    void cursorleft( int );
+    void cursorright( int );
     void printchar( unsigned char );
     void cursorto( uint8_t, uint8_t );
   private:
     long _serialRate;
+    int _xloc;
+    int _yloc;
 };
 
 #endif
