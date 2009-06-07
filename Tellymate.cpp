@@ -60,16 +60,24 @@ Tellymate::Tellymate( long serialRate )
 void Tellymate::init()
 {
   Serial.begin( _serialRate );
+  delay(50);
   Serial.print( CHAR_ESC "E");
   _xloc = 0;
   _yloc = 0;
-  delay( 50 );
+  cursoroff();
+  diagnostic();
+  fontdoublewidth( 18 );
+  cursorto( 18, 0 );
+  Serial.println( "Tellymate lib" );
+  Serial.print( "ver 0.01" );
+  delay( 4000 );
+  clearscreen();
 }
 
 void Tellymate::diagnostic()
 {
   Serial.print( CHAR_ESC "Q");
-  delay( 20 );
+  delay( 20 ); // tellymate users guide recommends at least 2ms delay
 }
 
 void Tellymate::clearscreen()
@@ -87,6 +95,15 @@ void Tellymate::cursoron()
 void Tellymate::cursoroff()
 { // <ESC>f 
   Serial.print( CHAR_ESC "f" );
+}
+
+void Tellymate::cursorto( uint8_t row , uint8_t col )
+{ // <ESC>Yrc
+  Serial.print( CHAR_ESC "Y" ) ;
+  Serial.print((unsigned char)(32 + row)) ;
+  Serial.print((unsigned char)(32 + col)) ;
+  _xloc = col;
+  _yloc = row;
 }
 
 void Tellymate::cursorup( int moves )
@@ -154,6 +171,12 @@ void Tellymate::lineoverflow( bool value )
 
 void Tellymate::printchar( unsigned char char2print )
 {
+  Serial.print( char2print );
+}
+
+void Tellymate::putchar( int xloc, int yloc, unsigned char char2print )
+{
+  cursorto( yloc, xloc );
   Serial.print( char2print );
 }
 
@@ -243,13 +266,4 @@ void Tellymate::box( int width, int height, int startx, int starty )
     cursorup(1);
     printchar( 179 );
   }
-}
-
-void Tellymate::cursorto( uint8_t row , uint8_t col )
-{ // <ESC>Yrc
-  Serial.print( CHAR_ESC "Y" ) ;
-  Serial.print((unsigned char)(32 + row)) ;
-  Serial.print((unsigned char)(32 + col)) ;
-  _xloc = col;
-  _yloc = row;
 }

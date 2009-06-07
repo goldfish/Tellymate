@@ -49,6 +49,7 @@ class Tellymate
     void clearscreen();
     void cursoron();
     void cursoroff();
+    void cursorto( uint8_t, uint8_t );
     void cursorup( int );
     void cursordown( int );
     void cursorleft( int );
@@ -63,7 +64,7 @@ class Tellymate
     void fontnormal( int );
     void box( int, int, int, int );
     void printchar( unsigned char );
-    void cursorto( uint8_t, uint8_t );
+    void putchar( int, int, unsigned char);
   private:
     long _serialRate;
     int _xloc;
