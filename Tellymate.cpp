@@ -167,6 +167,50 @@ void Tellymate::println( char pstring[])
   Serial.println( pstring );
 }
 
+void Tellymate::fontdoubleheight( int row )
+{
+  if( row == -1 ){
+    for( int i = 0; i < 25; i++ ){
+      cursorto( i, 0 );
+      Serial.print( CHAR_ESC "_0");
+    }
+  }
+  else{
+    cursorto( row, 0 );
+    Serial.print( CHAR_ESC "_2");
+    cursorto( row+1, 0 );
+    Serial.print( CHAR_ESC "_3");
+  }
+}
+
+void Tellymate::fontdoublewidth( int row )
+{
+  if( row == -1 ){
+    for( int i = 0; i < 25; i++ ){
+      cursorto( i, 0 );
+      Serial.print( CHAR_ESC "_1");
+    }
+  }
+  else{
+    cursorto( row, 0 );
+    Serial.print( CHAR_ESC "_1");
+  }
+}
+
+void Tellymate::fontnormal( int row )
+{
+  if( row == -1 ){
+    for( int i = 0; i < 25; i++ ){
+      cursorto( i, 0 );
+      Serial.print( CHAR_ESC "_0");
+    }
+  }
+  else{
+    cursorto( row, 0 );
+    Serial.print( CHAR_ESC "_0");
+  }
+}
+
 void Tellymate::box( int width, int height, int startx, int starty )
 {
   cursorto( starty, startx );

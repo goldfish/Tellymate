@@ -58,6 +58,9 @@ class Tellymate
     void lineoverflow( bool );
     void print( char[] );
     void println( char[] );
+    void fontdoubleheight( int );
+    void fontdoublewidth( int );
+    void fontnormal( int );
     void box( int, int, int, int );
     void printchar( unsigned char );
     void cursorto( uint8_t, uint8_t );
