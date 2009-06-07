@@ -37,6 +37,9 @@ OF SUCH DAMAGE.
 
 #define CHAR_ESC "\x1B"
 
+#define MAX_X 38
+#define MAX_Y 25
+
 //#include "WProgram.h"
 #include <inttypes.h>
 
@@ -62,6 +65,7 @@ class Tellymate
     void fontdoubleheight( int );
     void fontdoublewidth( int );
     void fontnormal( int );
+    void fill( int, int, int, int, unsigned char );
     void box( int, int, int, int );
     void printchar( unsigned char );
     void putchar( int, int, unsigned char);

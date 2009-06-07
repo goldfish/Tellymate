@@ -234,7 +234,25 @@ void Tellymate::fontnormal( int row )
   }
 }
 
-void Tellymate::box( int width, int height, int startx, int starty )
+void Tellymate::fill( int startx, int starty, int width, int height, unsigned char fillchar )
+{
+  int xend = startx + width;
+  if( xend > MAX_X ){
+    xend = MAX_X;
+  }
+  int yend = starty + height;
+  if( yend > MAX_Y ){
+    yend = MAX_Y;
+  }
+  for( int xloc = startx; xloc < xend; xloc++ ){
+    for( int yloc = starty; yloc < yend; yloc++ ){
+      cursorto( yloc, xloc );
+      printchar( fillchar );
+    }
+  } 
+}
+
+void Tellymate::box( int startx, int starty, int width, int height )
 {
   cursorto( starty, startx );
   printchar( 218 );
