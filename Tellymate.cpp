@@ -67,7 +67,7 @@ void Tellymate::init()
   cursoroff();
   diagnostic();
   fontdoublewidth( 18 );
-  cursorto( 18, 0 );
+  cursorto( 0, 18 );
   Serial.println( "Tellymate lib" );
   Serial.print( "ver 0.01" );
   delay( 4000 );
@@ -97,13 +97,13 @@ void Tellymate::cursoroff()
   Serial.print( CHAR_ESC "f" );
 }
 
-void Tellymate::cursorto( uint8_t row , uint8_t col )
+void Tellymate::cursorto( uint8_t xloc , uint8_t yloc )
 { // <ESC>Yrc
   Serial.print( CHAR_ESC "Y" ) ;
-  Serial.print((unsigned char)(32 + row)) ;
-  Serial.print((unsigned char)(32 + col)) ;
-  _xloc = col;
-  _yloc = row;
+  Serial.print((unsigned char)(32 + yloc)) ;
+  Serial.print((unsigned char)(32 + xloc)) ;
+  _xloc = xloc;
+  _yloc = yloc;
 }
 
 void Tellymate::cursorup( int moves )
@@ -112,7 +112,7 @@ void Tellymate::cursorup( int moves )
   if( _yloc < 0 ){
       _yloc = 0;
   }
-  cursorto( _yloc, _xloc);
+  cursorto( _xloc, _yloc);
 }
 
 void Tellymate::cursordown( int moves )
@@ -121,7 +121,7 @@ void Tellymate::cursordown( int moves )
   if( _yloc > 24 ){
       _yloc = 24;
   }
-  cursorto( _yloc, _xloc);
+  cursorto( _xloc, _yloc);
 }
 
 void Tellymate::cursorright( int moves )
@@ -130,7 +130,7 @@ void Tellymate::cursorright( int moves )
   if( _xloc > 37 ){
       _xloc = 37;
   }
-  cursorto( _yloc, _xloc);
+  cursorto( _xloc, _yloc);
 }
 
 void Tellymate::cursorleft( int moves )
@@ -139,7 +139,7 @@ void Tellymate::cursorleft( int moves )
   if( _xloc < 0 ){
       _xloc = 0;
   }
-  cursorto( _yloc, _xloc);
+  cursorto( _xloc, _yloc);
 }
 
 void Tellymate::cursorhome()
@@ -176,7 +176,7 @@ void Tellymate::printchar( unsigned char char2print )
 
 void Tellymate::putchar( int xloc, int yloc, unsigned char char2print )
 {
-  cursorto( yloc, xloc );
+  cursorto( xloc, yloc );
   Serial.print( char2print );
 }
 
@@ -194,14 +194,14 @@ void Tellymate::fontdoubleheight( int row )
 {
   if( row == -1 ){
     for( int i = 0; i < 25; i++ ){
-      cursorto( i, 0 );
+      cursorto( 0, i );
       Serial.print( CHAR_ESC "_0");
     }
   }
   else{
-    cursorto( row, 0 );
+    cursorto( 0, row );
     Serial.print( CHAR_ESC "_2");
-    cursorto( row+1, 0 );
+    cursorto( 0, row+1 );
     Serial.print( CHAR_ESC "_3");
   }
 }
@@ -210,12 +210,12 @@ void Tellymate::fontdoublewidth( int row )
 {
   if( row == -1 ){
     for( int i = 0; i < 25; i++ ){
-      cursorto( i, 0 );
+      cursorto( 0, i );
       Serial.print( CHAR_ESC "_1");
     }
   }
   else{
-    cursorto( row, 0 );
+    cursorto( 0, row );
     Serial.print( CHAR_ESC "_1");
   }
 }
@@ -224,12 +224,12 @@ void Tellymate::fontnormal( int row )
 {
   if( row == -1 ){
     for( int i = 0; i < 25; i++ ){
-      cursorto( i, 0 );
+      cursorto( 0, i );
       Serial.print( CHAR_ESC "_0");
     }
   }
   else{
-    cursorto( row, 0 );
+    cursorto( 0, row );
     Serial.print( CHAR_ESC "_0");
   }
 }
@@ -246,7 +246,7 @@ void Tellymate::fill( int startx, int starty, int width, int height, unsigned ch
   }
   for( int xloc = startx; xloc < xend; xloc++ ){
     for( int yloc = starty; yloc < yend; yloc++ ){
-      cursorto( yloc, xloc );
+      cursorto( xloc, yloc );
       printchar( fillchar );
     }
   } 
@@ -254,7 +254,7 @@ void Tellymate::fill( int startx, int starty, int width, int height, unsigned ch
 
 void Tellymate::box( int startx, int starty, int width, int height )
 {
-  cursorto( starty, startx );
+  cursorto( startx, starty );
   printchar( 218 );
   int xspace = width - 2;
   int yspace = height - 2;
