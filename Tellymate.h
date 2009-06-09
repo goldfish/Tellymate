@@ -65,6 +65,7 @@ class Tellymate
     void println( char[] );
     void fontdoubleheight( int );
     void fontdoublewidth( int );
+    void fontlarge( int );
     void fontnormal( int );
     void fill( int, int, int, int, unsigned char );
     void box( int, int, int, int );
