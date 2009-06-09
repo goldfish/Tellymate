@@ -58,6 +58,7 @@ class Tellymate
     void cursorleft( int );
     void cursorright( int );
     void cursorhome();
+    void newline();
     void blockcursor( bool );
     void lineoverflow( bool );
     void print( char[] );

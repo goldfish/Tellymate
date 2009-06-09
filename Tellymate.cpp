@@ -47,6 +47,7 @@ TellyMate Serial to Video adapter
 #include "Tellymate.h"
 
 #define CHAR_ESC "\x1B"
+#define CHAR_DLE "\x10"
 #define CHAR_CR "\x0D"
 #define CHAR_LF "\x0A"
 
@@ -149,6 +150,11 @@ void Tellymate::cursorhome()
   _yloc = 0;
 }
 
+void Tellymate::newline()
+{
+  Serial.print( CHAR_CR CHAR_LF );
+}
+
 void Tellymate::blockcursor( bool value )
 {
   if( value ){
@@ -171,12 +177,14 @@ void Tellymate::lineoverflow( bool value )
 
 void Tellymate::printchar( unsigned char char2print )
 {
+  Serial.print( CHAR_DLE );
   Serial.print( char2print );
 }
 
 void Tellymate::putchar( int xloc, int yloc, unsigned char char2print )
 {
   cursorto( xloc, yloc );
+  Serial.print( CHAR_DLE );
   Serial.print( char2print );
 }
 
